@@ -60,7 +60,10 @@ app.post('/register', async (req, res) => {
 
     await newUser.save();
 
-    res.status(200).json({ message: 'User registered successfully' });
+    res.cookie('userId', newUser._id.toString(), { httpOnly: true });
+    res.cookie('isLoggedIn', 'true', { httpOnly: true });
+
+    res.status(200).json({ message: 'User registered successfully', userId: newUser._id });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while processing your request' });
   }
@@ -80,9 +83,28 @@ app.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Incorrect password' });
     }
 
-    res.status(200).json({ message: 'User logged in successfully' });
+    res.cookie('userId', user._id.toString(), { httpOnly: true });
+    res.cookie('isLoggedIn', 'true', { httpOnly: true });
+
+    res.status(200).json({ message: 'User logged in successfully', userId: user._id });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while processing your request' });
+  }
+});
+
+// New route to fetch username by user ID
+app.get('/user/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({ username: user.username });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the user data' });
   }
 });
 

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 // Styled Components
 const Container = styled.div`
@@ -41,18 +43,27 @@ const MainPage = () => {
   const [loggedInUsername, setLoggedInUsername] = useState('');
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
-    const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
+    const fetchUsername = async () => {
+      const userId = Cookies.get('userId');
+      if (userId) {
+        try {
+          const response = await axios.get(`http://localhost:5000/user/${userId}`);
+          if (response.data && response.data.username) {
+            setLoggedInUsername(response.data.username);
+            setIsLoggedIn(true);
+          }
+        } catch (error) {
+          console.error('Error fetching username:', error);
+        }
+      }
+    };
 
-    if (storedIsLoggedIn === 'true' && storedUsername) {
-      setIsLoggedIn(true);
-      setLoggedInUsername(storedUsername);
-    }
+    fetchUsername();
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('username');
-    localStorage.removeItem('isLoggedIn');
+    Cookies.remove('userId');
+    Cookies.remove('isLoggedIn');
     setIsLoggedIn(false);
     setLoggedInUsername('');
   };
