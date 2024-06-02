@@ -63,10 +63,9 @@ const CoverContainer = styled.div`
   width: calc(50% - 40px);
   height: 100%;
   position: absolute;
-  background-image: url(${props => props.active ? registerImage : loginImage});
   background-size: cover;
   z-index: 1;
-  transition: transform 0.5s, text-align 0.5s;
+  transition: transform 0.5s ease-in-out, background-image 0.5s ease-in-out; // Added transition for background-image
   transform: translateX(${props => props.active ? '0%' : '100%'});
   display: flex;
   flex-direction: column;
@@ -78,7 +77,9 @@ const CoverContainer = styled.div`
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
   font-family: 'Arial', sans-serif;
   border-radius: ${props => props.active ? '20px 0 0 20px' : '0 20px 20px 0'};
+  background-image: url(${props => props.active ? registerImage : loginImage}); // Moved background-image here
 `;
+
 
 const Form = styled.form`
   display: flex;
@@ -133,14 +134,9 @@ const feedbackFadeIn = keyframes`
   }
 `;
 
-const rainbow = keyframes`
-  0% { background-color: #00008B; } /* DarkBlue */
-  16% { background-color: #0000CD; } /* MediumBlue */
-  33% { background-color: #4169E1; } /* RoyalBlue */
-  50% { background-color: #4682B4; } /* SteelBlue */
-  66% { background-color: #6495ED; } /* CornflowerBlue */
-  83% { background-color: #87CEEB; } /* SkyBlue */
-  100% { background-color: #ADD8E6; } /* LightBlue */
+const whiteToLightBlue = keyframes`
+  0% { background-color: #FFFFFF; } /* White */
+  100% { background-color: #E6F7FF; } /* Light Blue */
 `;
 
 const FeedbackModal = styled.div`
@@ -149,7 +145,7 @@ const FeedbackModal = styled.div`
   left: 20px;
   background-color: #3851ec;
   color: white;
-  padding: 25px 45px;
+  padding: 25px 60px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   display: flex;
@@ -193,10 +189,10 @@ const TimerBar = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 2px; // Increased height
+  height: 3px; // Increased height
   border-radius: 10px;
-  background: linear-gradient(90deg, #00008B, #0000CD, #4169E1, #4682B4, #6495ED, #87CEEB, #ADD8E6);
-  animation: ${shrink} 5s linear, ${rainbow} 5s linear infinite;
+  background: linear-gradient(90deg, #FFFFFF, #E6F7FF);
+  animation: ${shrink} 5s linear, ${whiteToLightBlue} 5s linear infinite;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); // Added subtle shadow
 `;
 const AppContainer = styled.div`
@@ -230,14 +226,13 @@ const ToggleText = styled.span`
 const OVtext = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 60px;
+  justify-content: center;
+  padding: 40px;
+  margin-bottom: 0; // Remove bottom margin
   position: relative;
   font-size: 2.4rem;
   font-weight: bold;
-
-
-
-`;
+`
 
 const App = () => {
   const [activeSlide, setActiveSlide] = useState('register');
