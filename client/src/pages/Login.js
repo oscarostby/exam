@@ -1,8 +1,8 @@
+import Header from '../components/Headerlogin';
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import bgImage from '../images/R.jpg';
 import loginImage from '../images/login.png';
 import registerImage from '../images/register.png';
 
@@ -12,7 +12,6 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  //background-image: url(${bgImage});
   background-size: cover;
   background-position: center;
 `;
@@ -341,6 +340,7 @@ const App = () => {
       case 'login':
         return (
           <Container>
+            <Header />
             <Commode>
               <LeftSlide active={activeSlide === 'register'}>
                 <BlurredBackground />
