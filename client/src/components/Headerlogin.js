@@ -65,17 +65,45 @@ const ButtonContainer = styled.div`
 `;
 
 const Button = styled.button`
+  font-size: 1rem;
   font-weight: bold;
   background-color: transparent;
-  color: #000; /* Changed button text color to black */
-  border: 2px solid #000; /* Changed button border color to black */
+  color: black;
+  border: none;
   padding: 0.8rem 2rem;
   margin-left: 1rem;
   cursor: pointer;
+  border-radius: 10px;
+  text-decoration: none;
+  position: relative; /* Add position relative */
+  overflow: hidden; /* Add overflow hidden */
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    transform: translateX(-100%); /* Initially move the underline off-screen */
+    transition: transform 0.3s ease;
+  }
+
+  &:hover::before {
+    transform: translateX(0); /* Move the underline into view on hover */
+  }
+
+  transition: border-radius 0.3s ease, color 0.3s ease; /* Remove text-decoration from transition */
 
   &:hover {
-    background-color: #000; /* Changed background color on hover */
-    color: #fff; /* Changed text color on hover */
+    border-radius: 2%;
+  }
+
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
   }
 `;
 
