@@ -5,6 +5,9 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import bgImage from '../images/forrest.jpg';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
+
 const scroll = keyframes`
   0% { background-position: 50% 0%; }
   50% { background-position: 50% 100%; }
@@ -56,7 +59,7 @@ const MainPage = () => {
       const userId = Cookies.get('userId');
       if (userId) {
         try {
-          const response = await axios.get(`http://localhost:5000/user/${userId}`);
+          const response = await axios.get(`${apiUrl}/user/${userId}`);
           if (response.data && response.data.username) {
             setLoggedInUsername(response.data.username);
             setIsLoggedIn(true);

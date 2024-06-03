@@ -4,6 +4,9 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import LogoImage from '../images/logow.png';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
+
 const HeaderContainer = styled.header`
   position: fixed;
   top: 0;
@@ -146,7 +149,7 @@ const MainPage = () => {
       const userId = Cookies.get('userId');
       if (userId) {
         try {
-          const response = await axios.get(`http://localhost:5000/user/${userId}`);
+          const response = await axios.get(`${apiUrl}/api/user/${userId}`);
           if (response.data && response.data.username) {
             setLoggedInUsername(response.data.username);
             setIsLoggedIn(true);

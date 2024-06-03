@@ -3,8 +3,12 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import loginImage from '../images/login.png';
-import registerImage from '../images/register.png';
+import loginImage from '../images/log2.png';
+import registerImage from '../images/reg2.png';
+import bg2 from '../images/bg2.png'
+
+const apiUrl = process.env.REACT_APP_API_URL;
+
 
 // Styled components
 const Container = styled.div`
@@ -12,18 +16,44 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-size: cover;
-  background-position: center;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background: url(${bg2}) center center/cover no-repeat;
+    z-index: -2; /* Make sure the background is behind other content */
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust the darken level as needed */
+    z-index: -1; /* Ensure the dark overlay is behind other content but in front of the background image */
+  }
 `;
+
 const Commode = styled.div`
   width: 70vw;
   height: 70vh;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.2); /* semi-transparent background */
   position: relative;
   display: flex;
   border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Adjusted shadow color */
+  backdrop-filter: blur(10px); /* Applies the blur effect */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
 `;
+
 
 const Slide = styled.div`
   width: 50%;
@@ -72,8 +102,8 @@ const CoverContainer = styled.div`
   align-items: ${props => props.active ? 'flex-end' : 'flex-start'};
   padding: 0 20px;
   overflow: hidden;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  color: black; /* Changed text color to black */
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6); /* Adjusted text shadow color */
   font-family: 'Arial', sans-serif;
   border-radius: ${props => props.active ? '20px 0 0 20px' : '0 20px 20px 0'};
   background-image: url(${props => props.active ? registerImage : loginImage}); // Moved background-image here
@@ -91,7 +121,7 @@ const Input = styled.input`
   padding: 10px; /* Increased padding */
   width: 200px;
   border: none;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid black; /* Changed border color to black */
   background: #edf0f5; /* Added background color */
   color: black; /* Changed text color */
   font-size: 1rem;
@@ -104,18 +134,15 @@ const Button = styled.button`
   margin-top: 20px;
   padding: 10px 30px;
   font-size: 1rem;
-  background-color: #3851ec; /* Changed background color */
-  color: white;
-  border: 2px solid #3851ec;
+  background-color: white; /* Changed background color */
+  color: black;
+  border: 2px solid white;
   cursor: pointer;
   transition: padding 0.3s ease, border-color 0.3s ease, border-radius 0.3s ease,  background-color 0.3s ease;
 
   &:hover {
     padding: 10px 80px;
-
-    border: 2px solid #3851ec;
-    color: #3851ec;
-    background-color: rgba(255, 255, 255, 0);
+    border: 2px solid white;
     border-radius: 40px;
 
   
@@ -134,7 +161,7 @@ const feedbackFadeIn = keyframes`
 `;
 
 const whiteToLightBlue = keyframes`
-  0% { background-color: #FFFFFF; } /* White */
+  0% { background-color: #000000; } /* Black */
   100% { background-color: #E6F7FF; } /* Light Blue */
 `;
 
@@ -142,17 +169,16 @@ const FeedbackModal = styled.div`
   position: fixed;
   bottom: 20px;
   left: 20px;
-  background-color: #3851ec;
+  background-color: #0092cd;
   color: white;
   padding: 25px 60px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* Adjusted shadow color */
   display: flex;
   align-items: center;
   animation: ${feedbackFadeIn} 0.5s ease-in-out;
   overflow: hidden;
   border-radius: 10px;
-  color: white;
   font-size: 1.2rem;
   font-weight: bold;
 `;
@@ -209,17 +235,29 @@ const HomePage = ({ loggedInUsername }) => {
 };
 
 const ToggleButton = styled.button`
+margin-top: 50px;
   background: none;
   border: none;
-  color: blue;
-  text-decoration: underline;
+  color: #f0f0f0;  // Light color for contrast on dark background
   cursor: pointer;
-  font-size: 0.9rem;
-  margin-left: 10px;
+  font-size: 1rem;  // Slightly larger font size
+  margin-left: 8px;
+  padding: 6px 15px;  // More compact padding
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.4);  // Slightly darker background for better contrast
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);  // Subtle shadow for better visibility
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.5);  // Slightly darker on hover
+  }
+
+
 `;
+
 
 const ToggleText = styled.span`
   font-size: 0.9rem;
+  color: white; /* Changed text color to white */
 `;
 
 const OVtext = styled.div`
@@ -231,6 +269,7 @@ const OVtext = styled.div`
   position: relative;
   font-size: 2.4rem;
   font-weight: bold;
+  color: white; /* Changed text color to white */
 `
 
 const App = () => {
@@ -265,7 +304,8 @@ const App = () => {
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/register', registerData);
+      const response = await axios.post(`${apiUrl}/api/register`, registerData);
+
       if (response && response.data && response.data.userId) {
         setFeedback(response.data.message);
         setShowFeedback(true);
@@ -292,7 +332,7 @@ const App = () => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/login', loginData);
+      const response = await axios.post(`${apiUrl}/api/login`, loginData);
       if (response && response.data && response.data.userId) {
         setFeedback(response.data.message);
         setShowFeedback(true);

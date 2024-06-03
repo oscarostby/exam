@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import LogoImage from '../images/loginlogo.png';
+import LogoImage from '../images/logow.png';
+
+const apiUrl = process.env.REACT_APP_API_URL;
 
 const HeaderContainer = styled.header`
   position: fixed;
@@ -13,8 +15,7 @@ const HeaderContainer = styled.header`
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  background-color: transparent; /* Removed background color */
-  color: #000; /* Changed text color to black */
+  color: #fff;
   z-index: 1000;
 `;
 
@@ -50,7 +51,7 @@ const UsernameContainer = styled.div`
 `;
 
 const Username = styled.span`
-  color: #000; /* Changed text color to black */
+  color: #fff;
   font-weight: bold;
   font-size: 1.5rem;
   display: block;
@@ -68,7 +69,7 @@ const Button = styled.button`
   font-size: 1rem;
   font-weight: bold;
   background-color: transparent;
-  color: black;
+  color: #fff;
   border: none;
   padding: 0.8rem 2rem;
   margin-left: 1rem;
@@ -85,7 +86,7 @@ const Button = styled.button`
     left: 0;
     width: 100%;
     height: 2px;
-    background-color: black;
+    background-color: #fff;
     transform: translateX(-100%); /* Initially move the underline off-screen */
     transition: transform 0.3s ease;
   }
@@ -144,7 +145,7 @@ const MainPage = () => {
       const userId = Cookies.get('userId');
       if (userId) {
         try {
-          const response = await axios.get(`http://localhost:5000/user/${userId}`);
+          const response = await axios.get(`${apiUrl}/api/user/${userId}`);
           if (response.data && response.data.username) {
             setLoggedInUsername(response.data.username);
             setIsLoggedIn(true);
