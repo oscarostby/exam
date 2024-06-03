@@ -5,7 +5,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import loginImage from '../images/log2.png';
 import registerImage from '../images/reg2.png';
-import bg2 from '../images/bg2.png'
+import bg2 from '../images/bgforrest2.jpg'
 
 const apiUrl = process.env.REACT_APP_API_URL;
 

@@ -113,7 +113,9 @@ const Header = ({ isLoggedIn, loggedInUsername, handleLogout }) => {
     <HeaderContainer>
       <HeaderContent>
         <Logo>
+        <a href="/">
           <LogoImg src={LogoImage} alt="Logo" />
+        </a>
         </Logo>
         <UsernameContainer>
           <Username>{isLoggedIn ? `${loggedInUsername}` : 'Guest'}</Username>
