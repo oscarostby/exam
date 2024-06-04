@@ -9,7 +9,6 @@ import bg2 from '../images/bgforrest2.jpg'
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-
 // Styled components
 const Container = styled.div`
   display: flex;
@@ -54,7 +53,6 @@ const Commode = styled.div`
   -webkit-backdrop-filter: blur(10px); /* Safari support */
 `;
 
-
 const Slide = styled.div`
   width: 50%;
   height: 100%;
@@ -93,6 +91,8 @@ const CoverContainer = styled.div`
   height: 100%;
   position: absolute;
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   z-index: 1;
   transition: transform 0.5s ease-in-out, background-image 0.5s ease-in-out; // Added transition for background-image
   transform: translateX(${props => props.active ? '0%' : '100%'});
@@ -108,7 +108,6 @@ const CoverContainer = styled.div`
   border-radius: ${props => props.active ? '20px 0 0 20px' : '0 20px 20px 0'};
   background-image: url(${props => props.active ? registerImage : loginImage}); // Moved background-image here
 `;
-
 
 const Form = styled.form`
   display: flex;
@@ -129,7 +128,6 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  
   border-radius: 10px;
   margin-top: 20px;
   padding: 10px 30px;
@@ -144,8 +142,6 @@ const Button = styled.button`
     padding: 10px 80px;
     border: 2px solid white;
     border-radius: 40px;
-
-  
   }
 `;
 
@@ -196,7 +192,6 @@ const CloseButton = styled.button`
 
   &:hover {
     border-radius: 10px;
-
   }
 `;
 
@@ -232,10 +227,10 @@ const Bottomtext = styled.div`
 
 const HomePage = ({ loggedInUsername }) => {
   return <div>{true && (window.location.href = '/')}</div>;
-};
-
-const ToggleButton = styled.button`
-margin-top: 50px;
+ };
+ 
+ const ToggleButton = styled.button`
+  margin-top: 50px;
   background: none;
   border: none;
   color: #f0f0f0;  // Light color for contrast on dark background
@@ -246,21 +241,18 @@ margin-top: 50px;
   border-radius: 8px;
   background-color: rgba(0, 0, 0, 0.4);  // Slightly darker background for better contrast
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);  // Subtle shadow for better visibility
-  
+ 
   &:hover {
     background-color: rgba(0, 0, 0, 0.5);  // Slightly darker on hover
   }
-
-
-`;
-
-
-const ToggleText = styled.span`
+ `;
+ 
+ const ToggleText = styled.span`
   font-size: 0.9rem;
   color: white; /* Changed text color to white */
-`;
-
-const OVtext = styled.div`
+ `;
+ 
+ const OVtext = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -270,9 +262,9 @@ const OVtext = styled.div`
   font-size: 2.4rem;
   font-weight: bold;
   color: white; /* Changed text color to white */
-`
-
-const App = () => {
+ `;
+ 
+ const App = () => {
   const [activeSlide, setActiveSlide] = useState('register');
   const [registerData, setRegisterData] = useState({ username: '', password: '', confirmPassword: '' });
   const [loginData, setLoginData] = useState({ username: '', password: '' });
@@ -283,15 +275,15 @@ const App = () => {
   const [currentView, setCurrentView] = useState('login');
 
   useEffect(() => {
-    const isLoggedInFromStorage = localStorage.getItem('isLoggedIn');
-    const usernameFromStorage = localStorage.getItem('username');
+    const isLoggedInFromCookie = Cookies.get('isLoggedIn');
+    const usernameFromCookie = Cookies.get('username');
     const userIdFromCookie = Cookies.get('userId');
 
-    if (isLoggedInFromStorage === 'true' && usernameFromStorage && userIdFromCookie) {
+    if (isLoggedInFromCookie === 'true' && usernameFromCookie && userIdFromCookie) {
       setIsLoggedIn(true);
-      setLoggedInUsername(usernameFromStorage);
+      setLoggedInUsername(usernameFromCookie);
       setCurrentView('homepage');
-      console.log(`User: ${usernameFromStorage}, ID: ${userIdFromCookie}`);
+      console.log(`User: ${usernameFromCookie}, ID: ${userIdFromCookie}`);
     } else {
       console.log('User not logged in');
     }
@@ -310,10 +302,9 @@ const App = () => {
         setFeedback(response.data.message);
         setShowFeedback(true);
         setIsLoggedIn(true);
-        setLoggedInUsername(registerData.username);
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', registerData.username);
-        Cookies.set('userId', response.data.userId);
+        Cookies.set('isLoggedIn', 'true', { expires: 7 }); // Set cookie to expire in 7 days
+        Cookies.set('username', registerData.username.toLowerCase(), { expires: 7 }); // Endre linjen til å lagre verdien i lowercase
+        Cookies.set('userId', response.data.userId, { expires: 7 }); // Set cookie to expire in 7 days
         setCurrentView('homepage');
       } else {
         setFeedback('Unexpected response from server');
@@ -337,10 +328,9 @@ const App = () => {
         setFeedback(response.data.message);
         setShowFeedback(true);
         setIsLoggedIn(true);
-        setLoggedInUsername(loginData.username);
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', loginData.username);
-        Cookies.set('userId', response.data.userId);
+        Cookies.set('isLoggedIn', 'true', { expires: 7 }); // Set cookie to expire in 7 days
+        Cookies.set('username', loginData.username.toLowerCase(), { expires: 7 }); // Endre linjen til å lagre verdien i lowercase
+        Cookies.set('userId', response.data.userId, { expires: 7 }); // Set cookie to expire in 7 days
         setCurrentView('homepage');
       } else {
         setFeedback('Unexpected response from server');
@@ -421,7 +411,7 @@ const App = () => {
               <RightSlide active={activeSlide === 'login'}>
                 <BlurredBackground />
                 <Content>
-                <OVtext>
+                  <OVtext>
                     Login
                   </OVtext>
                   <Form onSubmit={handleLoginSubmit}>
@@ -438,17 +428,17 @@ const App = () => {
                       placeholder="Password"
                       value={loginData.password}
                       onChange={handleLoginInputChange}
-                    />
-                    <Button type="submit">Login</Button>
-                  </Form>
-                  <Bottomtext>
-                    <ToggleText>Don't have an account? </ToggleText>
-                    <ToggleButton onClick={toggleSlide}>Register here</ToggleButton>
-                  </Bottomtext>
-                </Content>
-              </RightSlide>
-              <CoverContainer active={activeSlide === 'login'} />
-            </Commode>
+                      />
+                      <Button type="submit">Login</Button>
+                      </Form>
+                      <Bottomtext>
+                      <ToggleText>Don't have an account? </ToggleText>
+                      <ToggleButton onClick={toggleSlide}>Register here</ToggleButton>
+                      </Bottomtext>
+                      </Content>
+                      </RightSlide>
+                      <CoverContainer active={activeSlide === 'login'} />
+                      </Commode>
           </Container>
         );
       case 'homepage':

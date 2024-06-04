@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import HomePage from "./pages/HomePage";
 import { importAllImages } from './utils/preloadImages';
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/home/:username" element={<HomePage />} />
       </Routes>
     </BrowserRouter>
   );

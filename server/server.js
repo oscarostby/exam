@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
+const messageRoutes = require('./routes/messageRoutes'); // Import the message routes
 require('dotenv').config(); // Load environment variables
 
 const app = express();
@@ -29,6 +30,7 @@ db.once('open', () => {
 });
 
 app.use('/api', userRoutes);
+app.use('/api', messageRoutes); // Use the message routes
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

@@ -122,18 +122,18 @@ const Header = ({ isLoggedIn, loggedInUsername, handleLogout }) => {
         </a>
         </Logo>
         <UsernameContainer>
-          <Username>{isLoggedIn ? `${loggedInUsername}` : 'Guest'}</Username>
+          <Username>{isLoggedIn ? `!Honest user - ${loggedInUsername}` : '!Honest'}</Username>
         </UsernameContainer>
         <NavLinks>
           {isLoggedIn ? (
             <ButtonContainer>
-              <Button href="/profile">Profile</Button>
+            <a href={`/home/${loggedInUsername}`}><Button>Profile</Button></a>
+
               <Button onClick={handleLogout}>Logout</Button>
             </ButtonContainer>
           ) : (
             <ButtonContainer>
               <Button onClick={() => { window.location.href = '/login'; }}>Login</Button>
-              <Button onClick={() => { window.location.href = '/register'; }}>Register</Button>
             </ButtonContainer>
           )}
         </NavLinks>
@@ -166,6 +166,7 @@ const MainPage = () => {
   }, []);
 
   const handleLogout = () => {
+    Cookies.remove('username');
     Cookies.remove('userId');
     Cookies.remove('isLoggedIn');
     setIsLoggedIn(false);

@@ -129,7 +129,6 @@ const Header = ({ isLoggedIn, loggedInUsername, handleLogout }) => {
           ) : (
             <ButtonContainer>
               <Button onClick={() => { window.location.href = '/login'; }}>Login</Button>
-              <Button onClick={() => { window.location.href = '/register'; }}>Register</Button>
             </ButtonContainer>
           )}
         </NavLinks>
@@ -162,6 +161,7 @@ const MainPage = () => {
   }, []);
 
   const handleLogout = () => {
+    Cookies.remove('username');
     Cookies.remove('userId');
     Cookies.remove('isLoggedIn');
     setIsLoggedIn(false);
