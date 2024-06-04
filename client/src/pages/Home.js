@@ -7,7 +7,6 @@ import bgImage from '../images/forrest.jpg';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-
 const scroll = keyframes`
   0% { background-position: 50% 0%; }
   50% { background-position: 50% 100%; }
@@ -38,21 +37,49 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   color: #fff;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  box-sizing: border-box;
 `;
 
-const Username = styled.h1`
-  font-size: 2rem;
-  margin-bottom: 2rem;
+const PostList = styled.div`
+  margin-top: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
 `;
 
+const PostBox = styled.div`
+  background: rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 10px;
+  width: 100%;
+  box-sizing: border-box;
+`;
 
+const LoadMoreButton = styled.button`
+  background: rgba(0, 0, 0, 0.2);
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  margin: 20px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background: rgba(0, 0, 0, 0.4);
+  }
+`;
 
 const MainPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedInUsername, setLoggedInUsername] = useState('');
+  const [posts, setPosts] = useState([]);
+  const [visiblePosts, setVisiblePosts] = useState(5);
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -73,6 +100,21 @@ const MainPage = () => {
     fetchUsername();
   }, []);
 
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/api/messages`);
+        if (response.data && response.data.messages) {
+          setPosts(response.data.messages);
+        }
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
   const handleLogout = () => {
     Cookies.remove('userId');
     Cookies.remove('isLoggedIn');
@@ -80,13 +122,32 @@ const MainPage = () => {
     setLoggedInUsername('');
   };
 
+  const loadMorePosts = () => {
+    setVisiblePosts((prevVisiblePosts) => prevVisiblePosts + 5);
+  };
+
   return (
     <div>
       <Header />
       <Background />
       <Container>
-      <Username>Waiting for exam from the 4th to the 6th</Username>
-
+        <PostList>
+          {posts.slice(0, visiblePosts).map((post, index) => (
+            <PostBox key={index}>
+              <h2>{post.title}</h2>
+              <p>{post.message}</p>
+              <p><strong>Posted by:</strong> {post.username}</p>
+            </PostBox>
+          ))}
+        </PostList>
+        {visiblePosts < posts.length && (
+          <LoadMoreButton onClick={loadMorePosts}>
+            * * *
+          </LoadMoreButton>
+        )}
+        {visiblePosts >= posts.length && posts.length > 0 && (
+          <p>No more posts available</p>
+        )}
       </Container>
     </div>
   );
