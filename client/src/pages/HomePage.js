@@ -1,19 +1,17 @@
-// HomePage.js
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import styled from 'styled-components';
 import axios from 'axios';
 import Uploadbox from '../components/Uploadbox';
-import bannerImage from '../images/upmountain.jpg'; // Import the banner image
-import Header from '../components/Header'; // Correctly import Header
+import bannerImage from '../images/upmountain.jpg';
+import Header from '../components/Header';
 
 const WelcomeMessage = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(to right, #141515, #0e0e10); /* Light blue gradient */
+  background: linear-gradient(to right, #141515, #0e0e10);
   color: white;
   min-height: 100vh;
 `;
@@ -21,7 +19,7 @@ const WelcomeMessage = styled.div`
 const Banner = styled.div`
   position: relative;
   width: 100%;
-  height: 700px;
+  height: auto;
   overflow: hidden;
 `;
 
@@ -40,16 +38,15 @@ const BlurredBackground = styled.div`
   height: 50px;
   background: inherit;
   filter: blur(1px);
-
 `;
 
 const BannerText = styled.div`
   position: absolute;
   top: 40%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 70%);
   color: white;
-  font-size: 2.5rem;
+  font-size: 4rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 `;
 
@@ -61,15 +58,20 @@ const Content = styled.div`
 const PostList = styled.ul`
   list-style-type: none;
   padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
 `;
 
 const PostItem = styled.li`
-  background: white;
-  color: black;
-  margin-bottom: 20px;
+  background: #1f1f1f;
+  color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+`;
+
+const PostContent = styled.div`
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const EditContainer = styled.div`
@@ -82,8 +84,18 @@ const Button = styled.button`
   margin-top: 10px;
   padding: 10px;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+`;
+
+const EditButton = styled(Button)`
+  background: #4caf50;
+  color: white;
+`;
+
+const DeleteButton = styled(Button)`
+  background: #f44336;
+  color: white;
 `;
 
 const HomePage = () => {
@@ -153,7 +165,7 @@ const HomePage = () => {
 
   return (
     <>
-      <Header /> {/* Render the Header component */}
+      <Header />
       <WelcomeMessage>
         <Banner>
           <Image src={bannerImage} alt="Banner" />
@@ -163,7 +175,7 @@ const HomePage = () => {
           </BannerText>
         </Banner>
         <Content>
-          <Uploadbox /> {/* Render the Uploadbox component */}
+          <Uploadbox />
           <h2>Your Posts:</h2>
           <PostList>
             {posts.map(post => (
@@ -179,15 +191,15 @@ const HomePage = () => {
                       value={editedMessage}
                       onChange={(e) => setEditedMessage(e.target.value)}
                     />
-                    <Button onClick={handleSaveEdit} style={{ background: '#4caf50', color: 'white' }}>Publish Edit</Button>
+                    <EditButton onClick={handleSaveEdit}>Publish Edit</EditButton>
                   </EditContainer>
                 ) : (
-                  <div>
+                  <PostContent>
                     <h3>{post.title}</h3>
                     <p>{post.message}</p>
-                    <Button onClick={() => handleEdit(post._id, post.title, post.message)} style={{ background: '#2196f3', color: 'white' }}>Edit</Button>
-                    <Button onClick={() => handleDelete(post._id)} style={{ background: '#f44336', color: 'white' }}>Delete</Button>
-                  </div>
+                    <EditButton onClick={() => handleEdit(post._id, post.title, post.message)}>Edit</EditButton>
+                    <DeleteButton onClick={() => handleDelete(post._id)}>Delete</DeleteButton>
+                  </PostContent>
                 )}
               </PostItem>
             ))}
