@@ -5,16 +5,84 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import styled from 'styled-components';
 import axios from 'axios';
-import Uploadbox from '../components/Uploadbox'; // Corrected import path
+import Uploadbox from '../components/Uploadbox';
+import bannerImage from '../images/upmountain.jpg'; // Import the banner image
+import Header from '../components/Header'; // Correctly import Header
 
 const WelcomeMessage = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
-  font-size: 2rem;
-  background: linear-gradient(to right, #4facfe, #00f2fe); /* Light blue gradient */
+  background: linear-gradient(to right, #c4d0d0, #d8d4dc); /* Light blue gradient */
   color: white;
+  min-height: 100vh;
+`;
+
+const Banner = styled.div`
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+`;
+
+const Image = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0.7) 90%, rgba(0, 0, 0, 0) 100%);
+  mask-size: 100%;
+`;
+
+const BlurredBackground = styled.div`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  background: inherit;
+  filter: blur(1px);
+`;
+
+const BannerText = styled.div`
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 2.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+`;
+
+const Content = styled.div`
+  width: 80%;
+  margin-top: 20px;
+`;
+
+const PostList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+`;
+
+const PostItem = styled.li`
+  background: white;
+  color: black;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const EditContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const Button = styled.button`
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 `;
 
 const HomePage = () => {
@@ -83,38 +151,49 @@ const HomePage = () => {
   };
 
   return (
-    <WelcomeMessage>
-      <h1>Welcome, {username}!</h1>
-      <Uploadbox /> {/* Render the Uploadbox component */}
-      <h2>Your Posts:</h2>
-      <ul>
-        {posts.map(post => (
-          <li key={post._id}>
-            {editingPostId === post._id ? (
-              <div>
-                <input
-                  type="text"
-                  value={editedTitle}
-                  onChange={(e) => setEditedTitle(e.target.value)}
-                />
-                <textarea
-                  value={editedMessage}
-                  onChange={(e) => setEditedMessage(e.target.value)}
-                />
-                <button onClick={handleSaveEdit}>Publish Edit</button>
-              </div>
-            ) : (
-              <div>
-                <h3>{post.title}</h3>
-                <p>{post.message}</p>
-                <button onClick={() => handleEdit(post._id, post.title, post.message)}>Edit</button>
-                <button onClick={() => handleDelete(post._id)}>Delete</button>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
-    </WelcomeMessage>
+    <>
+      <Header /> {/* Render the Header component */}
+      <WelcomeMessage>
+        <Banner>
+          <Image src={bannerImage} alt="Banner" />
+          <BlurredBackground />
+          <BannerText>
+            Welcome, {username}!
+          </BannerText>
+        </Banner>
+        <Content>
+          <Uploadbox /> {/* Render the Uploadbox component */}
+          <h2>Your Posts:</h2>
+          <PostList>
+            {posts.map(post => (
+              <PostItem key={post._id}>
+                {editingPostId === post._id ? (
+                  <EditContainer>
+                    <input
+                      type="text"
+                      value={editedTitle}
+                      onChange={(e) => setEditedTitle(e.target.value)}
+                    />
+                    <textarea
+                      value={editedMessage}
+                      onChange={(e) => setEditedMessage(e.target.value)}
+                    />
+                    <Button onClick={handleSaveEdit} style={{ background: '#4caf50', color: 'white' }}>Publish Edit</Button>
+                  </EditContainer>
+                ) : (
+                  <div>
+                    <h3>{post.title}</h3>
+                    <p>{post.message}</p>
+                    <Button onClick={() => handleEdit(post._id, post.title, post.message)} style={{ background: '#2196f3', color: 'white' }}>Edit</Button>
+                    <Button onClick={() => handleDelete(post._id)} style={{ background: '#f44336', color: 'white' }}>Delete</Button>
+                  </div>
+                )}
+              </PostItem>
+            ))}
+          </PostList>
+        </Content>
+      </WelcomeMessage>
+    </>
   );
 };
 

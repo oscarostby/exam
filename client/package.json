@@ -17,6 +17,7 @@
     "express": "^4.19.2",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
+    "localtunnel": "^2.0.2",
     "mongoose": "^8.3.4",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",

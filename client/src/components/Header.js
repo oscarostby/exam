@@ -6,7 +6,6 @@ import LogoImage from '../images/logow.png';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-
 const HeaderContainer = styled.header`
   position: fixed;
   top: 0;
@@ -44,6 +43,19 @@ const LogoImg = styled.img`
 
 const NavLinks = styled.nav`
   display: flex;
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const HamburgerMenu = styled.div`
+  display: none;
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-left: 1rem; /* Adjust the margin to move the icon more to the left */
+  }
 `;
 
 const UsernameContainer = styled.div`
@@ -112,14 +124,33 @@ const Button = styled.button`
   }
 `;
 
+const MobileMenu = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* Take up the entire screen */
+  background-color: rgba(0, 0, 0, 0.5); /* Darken the background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+`;
+
 const Header = ({ isLoggedIn, loggedInUsername, handleLogout }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
     <HeaderContainer>
       <HeaderContent>
         <Logo>
-        <a href="/">
-          <LogoImg src={LogoImage} alt="Logo" />
-        </a>
+          <a href="/">
+            <LogoImg src={LogoImage} alt="Logo" />
+          </a>
         </Logo>
         <UsernameContainer>
           <Username>{isLoggedIn ? `!Honest user - ${loggedInUsername}` : '!Honest'}</Username>
@@ -127,8 +158,7 @@ const Header = ({ isLoggedIn, loggedInUsername, handleLogout }) => {
         <NavLinks>
           {isLoggedIn ? (
             <ButtonContainer>
-            <a href={`/home/${loggedInUsername}`}><Button>Profile</Button></a>
-
+              <a href={`/home/${loggedInUsername}`}><Button>Profile</Button></a>
               <Button onClick={handleLogout}>Logout</Button>
             </ButtonContainer>
           ) : (
@@ -137,7 +167,28 @@ const Header = ({ isLoggedIn, loggedInUsername, handleLogout }) => {
             </ButtonContainer>
           )}
         </NavLinks>
+        <HamburgerMenu onClick={toggleMenu}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M3 6H21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M3 18H21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </HamburgerMenu>
       </HeaderContent>
+      {menuOpen && (
+        <MobileMenu>
+          {isLoggedIn ? (
+            <ButtonContainer>
+              <a href={`/home/${loggedInUsername}`}><Button>Profile</Button></a>
+              <Button onClick={handleLogout}>Logout</Button>
+            </ButtonContainer>
+          ) : (
+            <ButtonContainer>
+              <Button onClick={() => { window.location.href = '/login'; }}>Login</Button>
+            </ButtonContainer>
+          )}
+        </MobileMenu>
+      )}
     </HeaderContainer>
   );
 };
@@ -172,7 +223,6 @@ const MainPage = () => {
     setIsLoggedIn(false);
     setLoggedInUsername('');
   };
-
   return (
     <div>
       <Header isLoggedIn={isLoggedIn} loggedInUsername={loggedInUsername} handleLogout={handleLogout} />
@@ -182,3 +232,6 @@ const MainPage = () => {
 };
 
 export default MainPage;
+
+
+ 

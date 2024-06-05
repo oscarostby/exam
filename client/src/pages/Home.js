@@ -16,7 +16,7 @@ const scroll = keyframes`
 const zoom = keyframes`
   0% { transform: scale(1); }
   50% { transform: scale(2); }
-  100% { transform: scale(3); }
+  100% { transform: scale(1); }
 `;
 
 const Background = styled.div`
@@ -45,7 +45,7 @@ const Container = styled.div`
 `;
 
 const PostList = styled.div`
-  margin-top: 300px;
+  margin-top: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -54,7 +54,8 @@ const PostList = styled.div`
 `;
 
 const PostBox = styled.div`
-  background: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(2px);
   padding: 20px;
   margin: 10px 0;
   border-radius: 10px;
@@ -63,17 +64,24 @@ const PostBox = styled.div`
 `;
 
 const LoadMoreButton = styled.button`
-  background: rgba(0, 0, 0, 0.2);
+  background: white;
   border: none;
-  color: #fff;
+  color: black;
   padding: 10px 20px;
   margin: 20px 0;
   border-radius: 5px;
+  border: 2px solid white;
   cursor: pointer;
+  transition: color 0.2s ease-in-out, background 0.2s ease-in-out, border-radius 0.2s ease-in-out, padding 0.2s ease-in-out;
+
   &:hover {
+    color: white;
     background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+    padding: 10px 30px;
   }
 `;
+
 
 const MainPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -142,7 +150,7 @@ const MainPage = () => {
         </PostList>
         {visiblePosts < posts.length && (
           <LoadMoreButton onClick={loadMorePosts}>
-            * * *
+            Load more
           </LoadMoreButton>
         )}
         {visiblePosts >= posts.length && posts.length > 0 && (
