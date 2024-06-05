@@ -72,7 +72,7 @@ function UserPosts() {
       <Header /> {/* Including the Header component */}
       <Bg>
         <Container>
-          <Title>Messages for {username}</Title>
+          <Title>Messages from {username}</Title>
           {messages.map(message => (
             <PostContainer key={message._id}>
               <MessageTitle>{message.title}</MessageTitle>

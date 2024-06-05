@@ -13,7 +13,7 @@ const WelcomeMessage = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(to right, #c4d0d0, #d8d4dc); /* Light blue gradient */
+  background: linear-gradient(to right, #141515, #0e0e10); /* Light blue gradient */
   color: white;
   min-height: 100vh;
 `;
@@ -21,7 +21,7 @@ const WelcomeMessage = styled.div`
 const Banner = styled.div`
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 700px;
   overflow: hidden;
 `;
 
@@ -40,11 +40,12 @@ const BlurredBackground = styled.div`
   height: 50px;
   background: inherit;
   filter: blur(1px);
+
 `;
 
 const BannerText = styled.div`
   position: absolute;
-  top: 60%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
