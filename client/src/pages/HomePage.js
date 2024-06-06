@@ -124,12 +124,14 @@ const HomePage = () => {
   const fetchPosts = async (username) => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/messages/${username}`);
-      setPosts(response.data.messages || []);
+      const sortedPosts = (response.data.messages || []).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setPosts(sortedPosts);
     } catch (error) {
       console.error('Error fetching posts:', error);
     }
   };
-
+  
+  
   const handleEdit = (postId, title, message) => {
     setEditingPostId(postId);
     setEditedTitle(title);
