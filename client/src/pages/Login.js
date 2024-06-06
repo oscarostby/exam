@@ -283,6 +283,7 @@ const HomePage = ({ loggedInUsername }) => {
       setIsLoggedIn(true);
       setLoggedInUsername(usernameFromCookie);
       setCurrentView('homepage');
+      window.history.pushState(null, null, `/home/${usernameFromCookie}`);
       console.log(`User: ${usernameFromCookie}, ID: ${userIdFromCookie}`);
     } else {
       console.log('User not logged in');
@@ -302,10 +303,11 @@ const HomePage = ({ loggedInUsername }) => {
         setFeedback(response.data.message);
         setShowFeedback(true);
         setIsLoggedIn(true);
-        Cookies.set('isLoggedIn', 'true', { expires: 7 }); // Set cookie to expire in 7 days
-        Cookies.set('username', registerData.username.toLowerCase(), { expires: 7 }); // Endre linjen til å lagre verdien i lowercase
-        Cookies.set('userId', response.data.userId, { expires: 7 }); // Set cookie to expire in 7 days
+        Cookies.set('isLoggedIn', 'true', { expires: 7 });
+        Cookies.set('username', registerData.username.toLowerCase(), { expires: 7 });
+        Cookies.set('userId', response.data.userId, { expires: 7 });
         setCurrentView('homepage');
+        window.history.pushState(null, null, `/home/${registerData.username.toLowerCase()}`);
       } else {
         setFeedback('Unexpected response from server');
         setShowFeedback(true);
@@ -328,10 +330,11 @@ const HomePage = ({ loggedInUsername }) => {
         setFeedback(response.data.message);
         setShowFeedback(true);
         setIsLoggedIn(true);
-        Cookies.set('isLoggedIn', 'true', { expires: 7 }); // Set cookie to expire in 7 days
-        Cookies.set('username', loginData.username.toLowerCase(), { expires: 7 }); // Endre linjen til å lagre verdien i lowercase
-        Cookies.set('userId', response.data.userId, { expires: 7 }); // Set cookie to expire in 7 days
+        Cookies.set('isLoggedIn', 'true', { expires: 7 });
+        Cookies.set('username', loginData.username.toLowerCase(), { expires: 7 });
+        Cookies.set('userId', response.data.userId, { expires: 7 });
         setCurrentView('homepage');
+        window.history.pushState(null, null, `/home/${loginData.username.toLowerCase()}`);
       } else {
         setFeedback('Unexpected response from server');
         setShowFeedback(true);
@@ -428,23 +431,26 @@ const HomePage = ({ loggedInUsername }) => {
                       placeholder="Password"
                       value={loginData.password}
                       onChange={handleLoginInputChange}
-                      />
-                      <Button type="submit">Login</Button>
-                      </Form>
-                      <Bottomtext>
-                      <ToggleText>Don't have an account? </ToggleText>
-                      <ToggleButton onClick={toggleSlide}>Register here</ToggleButton>
-                      </Bottomtext>
-                      </Content>
-                      </RightSlide>
-                      <CoverContainer active={activeSlide === 'login'} />
-                      </Commode>
+                    />
+                    <Button type="submit">Login</Button>
+                  </Form>
+                  <Bottomtext>
+                    <ToggleText>Don't have an account? </ToggleText>
+                    <ToggleButton onClick={toggleSlide}>Register here</ToggleButton>
+                  </Bottomtext>
+                </Content>
+              </RightSlide>
+              <CoverContainer active={activeSlide === 'login'} />
+            </Commode>
           </Container>
         );
-      case 'homepage':
-        return <HomePage loggedInUsername={loggedInUsername} />;
-      default:
-        return null;
+        case 'homepage':
+          window.location.href = `/home/${loggedInUsername}`;
+          window.location.reload();
+          return null;
+        default:
+          return null;
+        
     }
   };
 

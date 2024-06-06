@@ -112,12 +112,12 @@ const HomePage = () => {
     if (savedUsername) {
       setUsername(savedUsername);
       if (savedUsername !== routeUsername) {
-        navigate('/login');
+        navigate('/');
       }
       // Fetch posts for the logged-in user
       fetchPosts(savedUsername);
     } else {
-      navigate('/login');
+      navigate('/');
     }
   }, [routeUsername, navigate]);
 

@@ -2,17 +2,17 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
-const messageRoutes = require('./routes/messageRoutes'); // Import the message routes
-require('dotenv').config(); // Load environment variables
+const messageRoutes = require('./routes/messageRoutes'); 
+require('dotenv').config(); 
 
 const app = express();
-const port = process.env.PORT || 6001; // Use PORT environment variable or default to 5000
+const port = process.env.PORT || 6001; 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-const connectionString = process.env.MONGO_URI; // Use MONGO_URI environment variable for MongoDB connection
+const connectionString = process.env.MONGO_URI; 
 
 mongoose.connect(connectionString, {
   useNewUrlParser: true,
@@ -30,7 +30,7 @@ db.once('open', () => {
 });
 
 app.use('/api', userRoutes);
-app.use('/api', messageRoutes); // Use the message routes
+app.use('/api', messageRoutes); 
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
